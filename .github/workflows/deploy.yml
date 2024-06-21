@@ -1,0 +1,46 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+
+    - name: Build with Maven
+      run: mvn clean package -P war
+      env:
+        DB_URL: ${{ secrets.DB_URL }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.VPS_KEY }}
+
+    - name: Copy WAR to VPS
+      run: |
+          WAR_FILE=$(ls target/*.war)
+          echo "WAR file: $WAR_FILE"
+          scp -P ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no $WAR_FILE ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/root/debug/target/spring-supabase-practice-app.war
+  
+    - name: Deploy to VPS
+      run: |
+          ssh -p ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            cd /root/debug
+            docker-compose down
+            docker-compose up --build -d
+          EOF

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/base :: meta_header('ログイン',~{::link},~{::script})">	
+	<link rel="stylesheet" th:href="@{/css/login.css}" />
+	<script type="text/javascript" src="/js/formHandlers.js"></script>
+</head>
+<body>
+	<div th:replace="layout/base :: header"></div>
+	
+	<div class="container">
+		<div class="login-title">
+			<h2 class="text-center">ログイン</h2>	
+		</div>
+		
+		<form action="/login" method="post" onsubmit="handleOnSubmit()">
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			
+			<div class="mb-3">
+				<label for="username" class="form-label">User Name</label>
+				<input type="text" class="form-control" id="username" name="username" required />
+			</div>
+		  
+			<div class="mb-3">
+				<label for="password" class="form-label">Password</label>
+			    <input type="password" class="form-control" id="password" name="password" required />
+			</div>
+			
+	  		<button type="submit" class="btn btn-primary" id="loginBtn">ログイン</button>
+		</form>
+		
+		<div class="login-link">
+	        <p>ユーザー登録がまだの方は</p>
+	        <a href="/register">こちら</a>
+	    </div>
+	</div>
+	
+	<div th:replace="layout/base :: js-footer"></div>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", (event) => {
+			let loginBtn = document.getElementById('loginBtn');
+			loginBtn.disabled = false; 
+		});
+	</script>
+</body>
+</html>

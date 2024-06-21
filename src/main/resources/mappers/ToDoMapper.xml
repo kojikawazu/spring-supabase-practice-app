@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.app.mapper.ToDoMapper">
+	
+	<insert id="insertToDo" useGeneratedKeys="true" keyProperty="id">"
+		INSERT INTO todos (username, description, completed)
+		VALUES (#{username}, #{description}, #{completed})		
+	</insert>
+	
+	<select id="findAllToDos" resultType="com.example.app.model.ToDo">
+		SELECT * FROM todos WHERE username = #{username}		
+	</select>
+	
+	<update id="updateToDo">
+		UPDATE todos
+		SET description = #{description}, completed = #{completed}
+		WHERE id = #{id} AND username = #{username}		
+	</update>
+	
+	<delete id="deleteToDo">
+		DELETE FROM todos WHERE id = #{id} AND username = #{username}
+	</delete>
+</mapper>

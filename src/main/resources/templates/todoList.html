@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>ToDoリスト</title>
+	<style>
+        .todo-form {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+        .todo-form input, .todo-form button {
+            margin-right: 10px;
+        }
+        .todo-item {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .todo-description {
+            margin-right: 20px;
+        }
+    </style>
+	<script type="text/javascript" src="/js/formHandlers.js"></script>
+</head>
+<body>
+	<h1>ToDoリスト</h1>
+
+	<form action="/todos" method="post" th:object="${newToDo}" onsubmit="return handleOnSubmit(this);">
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+		<input type="text" th:field="*{description}" placeholder="新しいToDo" required />
+		<button type="submit">追加</button>
+	</form>
+	
+	<div th:each="todo : ${todos}" class="todo-item">
+	    <div class="todo-description" th:text="${todo.description}"></div>
+		
+	    <form action="/todos/update" method="post" th:object="${todo}" class="todo-form" onsubmit="return handleOnSubmit(this);">
+	        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+	        <input type="hidden" name="id" th:value="${todo.id}" />
+	        <input type="hidden" name="userId" th:value="${todo.userId}" />
+	        <input type="hidden" name="description" th:value="${todo.description}" />
+			
+	        <label for="completed">Completed</label>
+	        <input type="checkbox" name="completed" th:checked="${todo.completed}" />
+	        <button type="submit">更新</button>
+	    </form>
+		
+	    <form action="/todos/delete" method="post" class="todo-form" onsubmit="return handleConfirm(this, '本当に削除してよろしいでしょうか？');">
+	        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+	        <input type="hidden" name="id" th:value="${todo.id}" />
+	        <button type="submit">削除</button>
+	    </form>
+	</div>
+</body>
+</html>

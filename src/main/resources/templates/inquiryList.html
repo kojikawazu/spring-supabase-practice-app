@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://ww.thymeleaf.org">
+<head>
+	<title>お問い合わせ一覧</title>
+</head>
+<body>
+	<h1>お問い合わせ一覧</h1>
+	<table>
+		<tr>
+			<th>ID</th>
+			<th>ユーザー名</th>
+			<th>メールアドレス</th>
+			<th>メッセージ</th>
+			<th>作成日時</th>
+		</tr>
+		<tr th:each="inquiryWithUser : ${inquiries}">
+			<td th:text="${inquiryWithUser.inquiry.id}"></td>
+			<td th:text="${inquiryWithUser.user.username}"></td>
+			<td th:text="${inquiryWithUser.user.email}"></td>
+			<td th:text="${inquiryWithUser.inquiry.message}"></td>
+			<td th:text="${inquiryWithUser.inquiry.createdAt}"></td>
+		</tr>
+	</table>
+</body>
+</html>

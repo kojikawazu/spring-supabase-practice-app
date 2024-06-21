@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>お問い合わせフォーム</title>
+	<script type="text/javascript" src="/js/formHandlers.js"></script>
+</head>
+<body>
+    <form action="/inquiry" method="post" th:object="${inquiry}" onsubmit="return handleConfirm(this, '本当に送信してよろしいでしょうか？');">
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+		
+        <label for="email">メールアドレス</label>
+        <span th:text="${user.email}">メールアドレス</span>
+        <br />
+
+        <label for="message">メッセージ</label>
+        <textarea id="message" name="message" th:field="*{message}" required></textarea>
+        <br />
+
+        <button type="submit">送信</button>
+    </form>
+</body>
+</html>
