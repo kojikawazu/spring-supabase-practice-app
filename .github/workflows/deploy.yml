@@ -21,7 +21,8 @@ jobs:
 
     - name: Replace properties with environment variables
       run: |
-          sudo chown $USER:$USER src/main/resources/application.properties
+          sudo chown -R $USER:$USER .
+          ls -l src/main/resources/application.properties
           sed -i 's|DB_URL|'${{ secrets.DB_URL }}'|g' src/main/resources/application.properties
           sed -i 's|DB_USERNAME|'${{ secrets.DB_USERNAME }}'|g' src/main/resources/application.properties
           sed -i 's|DB_PASSWORD|'${{ secrets.DB_PASSWORD }}'|g' src/main/resources/application.properties
