@@ -21,11 +21,21 @@ jobs:
 
     - name: Replace properties with environment variables
       run: |
-          sudo chown -R $USER:$USER .
-          ls -l src/main/resources/application.properties
-          sed -i 's|DB_URL|'${{ secrets.DB_URL }}'|g' src/main/resources/application.properties
-          sed -i 's|DB_USERNAME|'${{ secrets.DB_USERNAME }}'|g' src/main/resources/application.properties
-          sed -i 's|DB_PASSWORD|'${{ secrets.DB_PASSWORD }}'|g' src/main/resources/application.properties
+            echo "spring.datasource.url=${{ secrets.DB_URL }}" > src/main/resources/application.properties
+            echo "spring.datasource.username=${{ secrets.DB_USERNAME }}" >> src/main/resources/application.properties
+            echo "spring.datasource.password=${{ secrets.DB_PASSWORD }}" >> src/main/resources/application.properties
+            echo "spring.datasource.driver-class-name=org.postgresql.Driver" >> src/main/resources/application.properties
+            echo "spring.application.name=spring-supabase-practice-app" >> src/main/resources/application.properties
+            echo "mybatis.type-aliases-package=com.example.app.model" >> src/main/resources/application.properties
+            echo "logging.level.root=INFO" >> src/main/resources/application.properties
+            echo "logging.level.com.example.app=DEBUG" >> src/main/resources/application.properties
+            echo "logging.level.org.springframework.web=DEBUG" >> src/main/resources/application.properties
+            echo "logging.level.org.springframework.security=DEBUG" >> src/main/resources/application.properties
+            echo "spring.session.store-type=none" >> src/main/resources/application.properties
+            echo "spring.datasource.hikari.data-source-properties.cachePrepStmts=true" >> src/main/resources/application.properties
+            echo "spring.datasource.hikari.data-source-properties.prepStmtCacheSize=250" >> src/main/resources/application.properties
+            echo "spring.datasource.hikari.data-source-properties.prepStmtCacheSqlLimit=2048" >> src/main/resources/application.properties
+            echo "spring.datasource.hikari.maximum-pool-size=10" >> src/main/resources/application.properties
       env:
           DB_URL: ${{ secrets.DB_URL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
